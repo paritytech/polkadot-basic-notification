@@ -57,7 +57,7 @@ jobs:
           ls -R artifacts/
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: npm-build-artifacts
           path: artifacts
