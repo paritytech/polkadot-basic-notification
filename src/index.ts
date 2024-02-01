@@ -7,7 +7,6 @@ import { logger } from './logger';
 import {
 	NotificationReport,
 	Reporter,
-	MiscReport,
 	NotificationReportType,
 	EventInner,
 	ExtrinsicInner
@@ -214,11 +213,12 @@ async function listAllChains(config: AppConfig, reporters: Reporter[]) {
 		})
 	);
 	// a rather wacky way to make sure this function never returns.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	return new Promise(() => { });
 }
 
 async function main() {
-	const { config, reporters, configName } = new ConfigBuilder();
+	const { config, reporters} = new ConfigBuilder();
 
 	const graceful = () => {
 		// if they are batch reporters, clean them.
@@ -242,16 +242,6 @@ async function main() {
 	const retry = true;
 	while (retry) {
 		try {
-			// send a startup notification
-			const report: MiscReport = {
-				time: new Date(),
-				message: `program ${configName} restarted`,
-				_type: 'misc'
-			};
-			reporters.forEach(async (r) => {
-				await r.report(report);
-			});
-
 			await listAllChains(config, reporters);
 		} catch (e) {
 			// if they are batch reporters, clean them.
